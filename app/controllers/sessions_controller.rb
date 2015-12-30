@@ -10,7 +10,6 @@ class SessionsController < ApplicationController
     m = Misoca.new
     authorize_url = m.client.auth_code.authorize_url(
       redirect_uri: redirect_uri,
-      #scope: 'read'
       scope: 'write'
     )
     redirect_to authorize_url
@@ -22,22 +21,15 @@ class SessionsController < ApplicationController
 
   def callback
     provider = params[:provider]
-    case provider
-    when 'freee'
+    if ['freee', 'misoca'].include?(provider)
       url = request.url
       url = url.split('?code=').first
-      f = Freee.new
-      f.api(params[:code], url)
-    when 'misoca'
-      url = request.url
-      url = url.split('?code=').first
-      m = Misoca.new
-      access_token = m.client.auth_code.get_token(
+      m = provider.capitalize.constantize.new
+      token = m.api(
         params[:code],
-        redirect_uri: url
-      )
-      #session[:token] = access_token.token
-      File.open("tmp/#{provider}_token.txt", 'w') { |file| file.write(access_token.token) }
+        url
+      ).token
+      m.class.set('token', token)
     else
       save_token(provider, request.env['omniauth.auth'])
     end
@@ -46,7 +38,6 @@ class SessionsController < ApplicationController
 
   def failure
     raise request.env.inspect
-    #raise request.env['omniauth.auth'].inspect
   end
 
   private
