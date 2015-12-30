@@ -51,3 +51,4 @@ gem 'omniauth-ruffnote', github: 'ruffnote/omniauth-ruffnote'
 #gem 'omniauth-misoca', github: 'pandeiro245/omniauth-misoca'
 
 gem 'omniauth-github'
+gem 'omniauth-trello'
