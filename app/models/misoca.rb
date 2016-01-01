@@ -20,4 +20,12 @@ class Misoca
   def invoices(offset=0)
     fetch "/api/v1/invoices/?limit=80&offset=#{offset}"
   end
+
+  def field_names
+    items = invoices
+    return nil unless items.present?
+    item = items.first
+    item2field_names(item)
+  end
 end
+

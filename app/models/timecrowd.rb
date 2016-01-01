@@ -4,23 +4,19 @@ class Timecrowd
   def self.setting
     {
       site: 'https://timecrowd.net',
-      authorize_url: nil,
-      token_url: nil
+      #model_names: ['Task', 'TimeEntry']
+      model_names: ['TimeEntry']
     }
   end
 
-  def sync
-    sync_entries
-    sync_tasks
-  end
-
-  def sync_entries(page=1)
-    kntn_loop('entries', {page: page})
-  end
-
-  def sync_tasks(page=1)
-    teams.each do |team|
-      kntn_loop('tasks', {team_id: team['id'], page: page, kntn_app: 2})
+  def sync model_name
+    case model_name
+    when 'TimeEntry'
+      kntn_loop('time_entries', {page: 1})
+    when 'Task'
+      teams.each do |team|
+        kntn_loop('tasks', {team_id: team['id'], page: 1})
+      end
     end
   end
 
@@ -32,13 +28,13 @@ class Timecrowd
     me['teams']
   end
 
-  def tasks params
-    team_id = params[:team_id]
+  def tasks params = {}
+    team_id = params[:team_id] || teams.first['id']
     page    = params[:page] || 1
     fetch "/api/v1/teams/#{team_id}/tasks?page=#{page}"
   end
 
-  def entries params
+  def time_entries params = {}
     page = params[:page] || 1
     fetch "/api/v1/time_entries?page=#{page}"
   end

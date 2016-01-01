@@ -26,8 +26,12 @@ end
 
 gem 'dotenv-rails'
 gem 'haml'
+gem 'require_reloader'
+gem "twitter-bootstrap-rails"
 
-gem 'kintone'
+#gem 'kintone'
+#gem 'kintone', path: '../kintone'
+gem 'kintone', path: '../kintone', github: 'pandeiro245/kintone', branch: 'develop'
 
 # for freee and misoca
 gem 'oauth2'
@@ -42,6 +46,7 @@ gem 'shotgun'
 
 gem 'omniauth-oauth2', '1.3.1'
 gem 'omniauth-timecrowd', github: 'ruffnote/omniauth-timecrowd'
+gem 'omniauth-ruffnote', github: 'ruffnote/omniauth-ruffnote'
 #gem 'omniauth-misoca', path: '../omniauth-misoca'
 #gem 'omniauth-misoca', github: 'pandeiro245/omniauth-misoca'
 
